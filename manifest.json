@@ -1,0 +1,17 @@
+{
+  "name": "Drunk Web",
+  "description": "I think, the world wide web are drunk.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "scripting"
+  ]
+}
