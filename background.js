@@ -1,37 +1,38 @@
 try {
-	var switchStatus = false;
+
+	let switchStatus = false;
+	const forwarding = chrome.runtime.getURL('forwarding.json');
+
 	chrome.runtime.onInstalled.addListener(() => {
 		chrome.storage.sync.set({ switchStatus });
 	});
 
-	chrome.tabs.onUpdated.addListener( function(tabId, changeInfo, tab) {
+	chrome.tabs.onUpdated.addListener( async (tabId, changeInfo, tab) => {
 		if (changeInfo.url && switchStatus) {
-			let newUrl = getNewUrl(changeInfo.url)
+			let newUrl = await getNewUrl(changeInfo.url)
 			if (newUrl) {
 				chrome.tabs.update(tab.id, {url: newUrl});
 			}
 		}
 	});
 
-	chrome.runtime.onMessage.addListener(function (request) {
+	chrome.runtime.onMessage.addListener( (request) => {
 		if (request.status === "change") {
-			switchStatus = true;
+			switchStatus = !switchStatus;
 			chrome.storage.sync.set({ switchStatus });
 		}
 	});
 
-	function getNewUrl(url) {
-		let forwarding = {}
-		forwarding["https://www.youtube.com/"] = "https://vimeo.com"
-		forwarding["https://www.facebook.com/"] = "https://twitter.com"
+	async function getNewUrl(url) {
+		let response = await fetch(forwarding);
 
-		if (url in forwarding) {
-			return forwarding[url];
+		if (response.ok) {
+			let json = await response.json();
+			return url in json ? json[url] : false
+		} else {
+			console.log("HTTP-Error: " + response.status);
 		}
-
-		return false;
 	}
-
 
 } catch (e) {
 	console.log(e);

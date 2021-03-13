@@ -1,17 +1,36 @@
 {
   "name": "Drunk Web",
   "description": "I think, the world wide web are drunk.",
-  "version": "1.0",
+  "version": "1.0.2",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/icons/16.png",
+      "32": "/icons/32.png",
+      "48": "/icons/48.png",
+      "128": "/icons/128.png"
+    }
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["forwarding.json"],
+      "matches": [],
+      "extension_ids": []
+    }
+  ],
   "permissions": [
     "tabs",
     "storage",
     "scripting"
-  ]
+  ],
+  "icons": {
+    "16": "/icons/16.png",
+    "32": "/icons/32.png",
+    "48": "/icons/48.png",
+    "128": "/icons/128.png"
+  }
 }

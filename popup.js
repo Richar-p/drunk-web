@@ -1,10 +1,12 @@
 let switchButton = document.getElementById('btn-switch')
 
-switchButton.addEventListener("click", async (e) => {
-	chrome.runtime.sendMessage({status: "change"});
-	if (switchButton.innerText == 'start') {
-		switchButton.innerText = 'stop'
-	} else {
-		switchButton.innerText = 'start'
-	}
+switchButton.addEventListener("click", async () => {
+	chrome.runtime.sendMessage( { status: "change" } );
+	switchButton.innerText = switchButton.innerText === 'Start' ? 'Stop' : 'Start'
 });
+
+window.onload = function() {
+	chrome.storage.sync.get('switchStatus', (item) => {
+		switchButton.innerText = item['switchStatus'] ? 'Stop' : 'Start'
+	});
+};
