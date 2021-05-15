@@ -8,10 +8,13 @@ try {
 	});
 
 	chrome.tabs.onUpdated.addListener( async (tabId, changeInfo, tab) => {
-		if (changeInfo.url && switchStatus) {
-			let newUrl = await getNewUrl(changeInfo.url)
-			if (newUrl) {
-				chrome.tabs.update(tab.id, {url: newUrl});
+		if (switchStatus) {
+			chrome.scripting.executeScript({target: {tabId: tabId}, files: ['artefact.js'] })
+			if (changeInfo.url) {
+				let newUrl = await getNewUrl(changeInfo.url)
+				if (newUrl) {
+					chrome.tabs.update(tab.id, {url: newUrl});
+				}
 			}
 		}
 	});
